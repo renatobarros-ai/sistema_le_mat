@@ -1,62 +1,66 @@
-# config/training_config.yaml - COMPATÍVEL COM SEU train_model.py ATUAL
-# Configuração para fine-tuning PTT5 com QLoRA
+# config/training_config.yaml
+# Arquivo de configuração para fine-tuning do modelo PTT5
+# Autor: Renato Barros
+# Email: falecomrenatobarros@gmail.com
+# Data: 2025
+# Descrição: Configurações otimizadas para treinamento com QLoRA e quantização 4-bit
 
 # Configurações do modelo base
 model_config:
-  name: "unicamp-dl/ptt5-base-portuguese-vocab"
-  max_length: 450
+  name: "unicamp-dl/ptt5-base-portuguese-vocab"  # Modelo PTT5 base em português
+  max_length: 450  # Comprimento máximo das sequências
   quantization:
-    load_in_4bit: true
-    bnb_4bit_use_double_quant: true
-    bnb_4bit_quant_type: "nf4"
-    bnb_4bit_compute_dtype: "torch.float16"
+    load_in_4bit: true  # Habilita quantização 4-bit para economia de memória
+    bnb_4bit_use_double_quant: true  # Dupla quantização para melhor precisão
+    bnb_4bit_quant_type: "nf4"  # Tipo de quantização otimizada
+    bnb_4bit_compute_dtype: "torch.float16"  # Tipo de dados para computação
 
-# Configurações LoRA para PEFT
+# Configurações LoRA (Low-Rank Adaptation) para PEFT
 lora_config:
-  r: 16
-  lora_alpha: 32
-  target_modules: ["q", "v", "k", "o", "wi_0", "wi_1", "wo"]
-  lora_dropout: 0.1
-  bias: "none"
-  task_type: "SEQ_2_SEQ_LM"
+  r: 16  # Rank dos adaptadores LoRA
+  lora_alpha: 32  # Parâmetro alpha para escalonamento
+  target_modules: ["q", "v", "k", "o", "wi_0", "wi_1", "wo"]  # Módulos alvo para LoRA
+  lora_dropout: 0.1  # Taxa de dropout para regularização
+  bias: "none"  # Configuração de bias
+  task_type: "SEQ_2_SEQ_LM"  # Tipo de tarefa (sequence-to-sequence)
 
 # Argumentos de treinamento
 training_args:
-  output_dir: "./results"
-  per_device_train_batch_size: 1
-  per_device_eval_batch_size: 1
-  gradient_accumulation_steps: 8
-  eval_accumulation_steps: 4
-  num_train_epochs: 20
-  warmup_ratio: 0.15
-  learning_rate: 0.00002  # CRÍTICO: float explícito para evitar erro de tipo
-  fp16: true
-  logging_steps: 8
-  save_steps: 60
-  eval_strategy: "epoch"
-  save_strategy: "epoch"
-  load_best_model_at_end: true
-  metric_for_best_model: "eval_rougeL"
-  greater_is_better: true
-  save_total_limit: 2
-  push_to_hub: false
-  dataloader_pin_memory: true
-  remove_unused_columns: false
-  gradient_checkpointing: true
-  optim: "adamw_torch"
-  weight_decay: 0.01
-  lr_scheduler_type: "cosine"
-  report_to: "none"
-  dataloader_num_workers: 2
-  max_grad_norm: 1.0
-  ddp_find_unused_parameters: false
+  output_dir: "./results"  # Diretório para salvar resultados
+  per_device_train_batch_size: 1  # Tamanho do batch por dispositivo (treino)
+  per_device_eval_batch_size: 1  # Tamanho do batch por dispositivo (avaliação)
+  gradient_accumulation_steps: 8  # Acumulação de gradientes
+  eval_accumulation_steps: 4  # Acumulação para avaliação
+  num_train_epochs: 20  # Número de épocas de treinamento
+  warmup_ratio: 0.15  # Proporção de aquecimento do learning rate
+  learning_rate: 0.00002  # Taxa de aprendizado (valor crítico como float)
+  fp16: true  # Precisão de 16 bits para economia de memória
+  logging_steps: 8  # Frequência de logging
+  save_steps: 60  # Frequência de salvamento
+  eval_strategy: "epoch"  # Estratégia de avaliação
+  save_strategy: "epoch"  # Estratégia de salvamento
+  load_best_model_at_end: true  # Carregar melhor modelo ao final
+  metric_for_best_model: "eval_rougeL"  # Métrica para seleção do melhor modelo
+  greater_is_better: true  # Indica se maior valor da métrica é melhor
+  save_total_limit: 2  # Limite de checkpoints salvos
+  push_to_hub: false  # Não enviar para o Hub
+  dataloader_pin_memory: true  # Otimização de memória
+  remove_unused_columns: false  # Manter colunas não utilizadas
+  gradient_checkpointing: true  # Checkpointing de gradientes
+  optim: "adamw_torch"  # Otimizador
+  weight_decay: 0.01  # Decaimento de peso para regularização
+  lr_scheduler_type: "cosine"  # Tipo de scheduler do learning rate
+  report_to: "none"  # Desabilitar relatórios externos
+  dataloader_num_workers: 2  # Número de workers para carregamento
+  max_grad_norm: 1.0  # Clipping de gradientes
+  ddp_find_unused_parameters: false  # Otimização DDP
 
 # Configurações de early stopping
 early_stopping:
-  patience: 4
-  threshold: 0.001
+  patience: 4  # Paciência para early stopping
+  threshold: 0.001  # Threshold mínimo de melhoria
 
-# CAMPOS ESPERADOS NO NÍVEL RAIZ PELO SEU CÓDIGO ATUAL
-dataset_path: "./database/db_ano_novo-462.xlsx"
-test_size: 0.15
-random_state: 42
+# Configurações de dados e paths
+dataset_path: "./database/db_462.xlsx"  # Caminho para o dataset
+test_size: 0.15  # Proporção dos dados para validação
+random_state: 42  # Seed para reprodutibilidade
