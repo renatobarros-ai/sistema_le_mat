@@ -12,7 +12,7 @@ O sistema espera um arquivo Excel (`.xlsx`) com as seguintes colunas:
 |--------|------|-------------|-----------|
 | `evento` | String | ✅ | Contexto do evento (ex: "Pinkpop", "Woodstock") |
 | `carta` | String | ✅ | Nome da carta (ex: "Dama", "Rei") |
-| `tema` | String | ✅ | Tema da interpretação (ex: "Catppuccin", "Tokio Night") |
+| `tema` | String | ✅ | Tema da interpretação (ex: "Catppuccin", "Tokyo Night") |
 | `secao` | String | ✅ | Seção específica (ex: "Ficção científica", "Biografia") |
 | `texto` | String | ✅ | Texto de interpretação esperado |
 
@@ -22,7 +22,7 @@ O sistema espera um arquivo Excel (`.xlsx`) com as seguintes colunas:
 evento       | carta | tema         | secao             | texto
 -------------|-------|--------------|-------------------|------------------
 Pinkpop      | Dama  | Catppuccin   | Ficção científica | Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Woodstock    | Rei   | Tokio Night  | Biografia         | Ut at risus vehicula, feugiat nibh a, venenatis felis.
+Woodstock    | Rei   | Tokyo Night  | Biografia         | Ut at risus vehicula, feugiat nibh a, venenatis felis.
 ```
 
 ## Conformidade com LGPD

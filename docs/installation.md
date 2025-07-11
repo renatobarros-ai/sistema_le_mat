@@ -126,7 +126,7 @@ mkdir -p database
    ```
    evento       | carta     | tema          | secao               | texto
    Pinkpop      | Dama      | Catppuccin    | Ficção científica   | Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-   Woodstock    | Rei       | Tokio Night   | Biografia           | Ut at risus vehicula, feugiat nibh a, venenatis felis.
+   Woodstock    | Rei       | Tokyo Night   | Biografia           | Ut at risus vehicula, feugiat nibh a, venenatis felis.
    ```
 
 ### Configuração
