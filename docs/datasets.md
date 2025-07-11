@@ -1,4 +1,4 @@
-# 🗂️ Datasets e Conformidade com LGPD
+# Datasets e Conformidade com LGPD
 
 Este documento explica como trabalhar com datasets no sistema, incluindo aspectos de privacidade e conformidade com a LGPD.
 
@@ -26,7 +26,7 @@ A Imperatriz | Natal     | Amor     | Família   | O amor familiar se destaca...
 O Louco      | Ano Novo  | Geral    | Mudanças  | Novos começos surgem...
 ```
 
-## 🔒 Conformidade com LGPD
+## Conformidade com LGPD
 
 ### Por que o Dataset não está no Repositório
 
@@ -61,7 +61,7 @@ df = validate_dataframe(df, required_columns)
 - Sem transmissão para serviços externos
 - Ambiente controlado
 
-## 📊 Preparação de Dados
+## Preparação de Dados
 
 ### Validação Automática
 
@@ -92,7 +92,7 @@ def clean_text(text):
     return re.sub(r'\s+', ' ', str(text)).strip()
 ```
 
-## 🔧 Configuração do Dataset
+## Configuração do Dataset
 
 ### Caminho do Arquivo
 
@@ -113,7 +113,7 @@ random_state: 42     # Seed para reprodutibilidade
 - Garante representatividade
 - Evita vazamento de dados
 
-## 📈 Qualidade dos Dados
+## Qualidade dos Dados
 
 ### Métricas de Qualidade
 
@@ -136,7 +136,7 @@ print(f"Comprimento máximo: {df['texto'].str.len().max()}")
 | **Variação de eventos** | 5+ eventos | Generalização |
 | **Variação de temas** | 10+ temas | Cobertura ampla |
 
-## 🛡️ Segurança dos Dados
+## Segurança dos Dados
 
 ### Armazenamento Local
 
@@ -165,19 +165,17 @@ results/training_metrics_*.json
 model_save/*/
 ```
 
-## 🎯 Boas Práticas
+## Boas Práticas
 
 ### Anonimização
 
-Se necessário, aplique anonimização:
+Se necessário, você pode implementar anonimização dos dados:
 
-```python
-def anonymize_data(df):
-    """Remove informações potencialmente identificadoras"""
-    # Exemplo: remover referências específicas
-    df['texto'] = df['texto'].str.replace(r'\b[A-Z][a-z]+\b', '[NOME]', regex=True)
-    return df
-```
+- Remoção de nomes próprios
+- Substituição de informações pessoais
+- Generalização de dados específicos
+
+Isso deve ser feito antes do treinamento, modificando o dataset original conforme suas necessidades de privacidade.
 
 ### Backup Seguro
 
@@ -223,7 +221,7 @@ database/
 - [ ] Logs são revisados
 - [ ] Documentação é atualizada
 
-## 🔄 Atualização de Datasets
+## Atualização de Datasets
 
 ### Processo Seguro
 
@@ -235,25 +233,17 @@ database/
 
 ### Script de Migração
 
-```python
-def migrate_dataset(old_path, new_path):
-    """Migra dataset mantendo compatibilidade"""
-    # Carregar dados antigos
-    df_old = pd.read_excel(old_path)
-    
-    # Aplicar transformações necessárias
-    df_new = transform_data(df_old)
-    
-    # Validar nova estrutura
-    validate_dataframe(df_new, required_columns)
-    
-    # Salvar nova versão
-    df_new.to_excel(new_path, index=False)
-    
-    print(f"Migração concluída: {old_path} → {new_path}")
-```
+Para migrar datasets entre versões:
 
-## 🆘 Suporte e Dúvidas
+1. **Backup**: Sempre faça backup do dataset original
+2. **Validação**: Verifique se a nova estrutura é compatível
+3. **Teste**: Execute com uma amostra pequena primeiro
+4. **Aplicação**: Processe o dataset completo
+5. **Verificação**: Confirme que o sistema funciona com os novos dados
+
+Use as funções existentes `validate_dataframe` e `clean_text` para garantir consistência.
+
+## Suporte e Dúvidas
 
 ### Questões Comuns
 

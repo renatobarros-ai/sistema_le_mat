@@ -1,8 +1,8 @@
-# 🔄 Processamento de Dados
+# Processamento de Dados
 
 Este documento detalha como o sistema processa e prepara os dados para o fine-tuning do modelo PTT5.
 
-## 📊 Pipeline de Processamento
+## Pipeline de Processamento
 
 ### 1. Carregamento dos Dados
 
@@ -48,41 +48,45 @@ train_df, val_df = train_test_split(
 - Garante representatividade
 - Evita viés em conjuntos pequenos
 
-## 🛠️ Função de Validação
+## Função de Validação
 
 ### Implementação Completa
 
 ```python
 def validate_dataframe(df, required_columns):
     """
-    Valida e limpa o DataFrame de entrada
+    Valida a estrutura do DataFrame e remove registros com valores nulos
     
     Args:
-        df: DataFrame original
-        required_columns: Lista de colunas obrigatórias
-    
+        df (pd.DataFrame): DataFrame a ser validado
+        required_columns (list): Lista de colunas obrigatórias
+        
     Returns:
-        DataFrame validado e limpo
+        pd.DataFrame: DataFrame validado e limpo
+        
+    Raises:
+        ValueError: Se alguma coluna obrigatória estiver ausente
     """
-    # Verificação de colunas
-    missing_cols = [col for col in required_columns if col not in df.columns]
-    if missing_cols:
-        raise ValueError(f"Colunas faltando: {missing_cols}")
+    # Verificação da presença das colunas obrigatórias
+    if not all(col in df.columns for col in required_columns):
+        raise ValueError(f"DataFrame faltando colunas necessárias: {required_columns}")
     
+    # Registro do número original de linhas
     original_rows = len(df)
     
-    # Remoção de nulos
+    # Remoção de linhas com valores nulos nas colunas essenciais
     df = df.dropna(subset=required_columns)
+    if len(df) < original_rows:
+        print(f"ATENÇÃO: {original_rows - len(df)} linhas removidas devido a valores nulos em colunas essenciais.")
     
-    # Limpeza de texto
+    # Limpeza e validação do conteúdo de texto
     df['texto'] = df['texto'].apply(clean_text)
     df = df.dropna(subset=['texto'])
     
-    # Relatório de limpeza
-    cleaned_rows = len(df)
-    if cleaned_rows < original_rows:
-        print(f"Registros removidos: {original_rows - cleaned_rows}")
-    
+    # Verificação adicional após limpeza de texto
+    if len(df) < original_rows:
+        print(f"ATENÇÃO: Mais {original_rows - len(df)} linhas removidas após limpeza de texto vazio.")
+
     return df
 ```
 
@@ -118,7 +122,7 @@ def clean_text(text):
     return text
 ```
 
-## 🎯 Preparação para Fine-tuning
+## Preparação para Fine-tuning
 
 ### Aplicação de Templates
 
@@ -222,7 +226,7 @@ tokenizer_config = {
 }
 ```
 
-## 📈 Estatísticas dos Dados
+## Estatísticas dos Dados
 
 ### Métricas Calculadas
 
@@ -277,7 +281,7 @@ def analyze_data_distribution(df):
     print(length_stats)
 ```
 
-## 🔍 Validação de Qualidade
+## Validação de Qualidade
 
 ### Verificações Automáticas
 
@@ -317,93 +321,28 @@ def validate_data_quality(df):
     return issues
 ```
 
-## 📊 Visualização dos Dados
+## Visualização dos Dados
 
-### Gráficos de Distribuição
+### Análise Estatística
 
-```python
-def plot_data_distribution(df):
-    """
-    Gera gráficos de distribuição
-    """
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    
-    fig, axes = plt.subplots(2, 2, figsize=(15, 10))
-    
-    # Distribuição por carta
-    df['carta'].value_counts().plot(kind='bar', ax=axes[0,0])
-    axes[0,0].set_title('Distribuição por Carta')
-    
-    # Distribuição por evento
-    df['evento'].value_counts().plot(kind='bar', ax=axes[0,1])
-    axes[0,1].set_title('Distribuição por Evento')
-    
-    # Distribuição de comprimento
-    df['texto'].str.len().hist(bins=30, ax=axes[1,0])
-    axes[1,0].set_title('Distribuição de Comprimento')
-    
-    # Boxplot de comprimento por carta
-    sns.boxplot(data=df, x='carta', y=df['texto'].str.len(), ax=axes[1,1])
-    axes[1,1].set_title('Comprimento por Carta')
-    axes[1,1].tick_params(axis='x', rotation=45)
-    
-    plt.tight_layout()
-    plt.savefig('data_distribution.png')
-    plt.close()
-```
+Para visualizar a distribuição dos dados, você pode usar bibliotecas como matplotlib e seaborn. O sistema não inclui funções de visualização pré-implementadas, mas as estatísticas básicas são calculadas automaticamente durante o processamento.
 
-## 🎯 Otimizações de Processamento
+## Otimizações de Processamento
 
-### Processamento em Lote
+### Processamento Eficiente
 
-```python
-def process_in_batches(df, batch_size=1000):
-    """
-    Processa dados em lotes para eficiência
-    
-    Args:
-        df: DataFrame a ser processado
-        batch_size: Tamanho do lote
-    
-    Yields:
-        Lotes processados
-    """
-    for i in range(0, len(df), batch_size):
-        batch = df.iloc[i:i+batch_size]
-        yield process_batch(batch)
-```
+O sistema processa os dados de forma eficiente usando:
 
-### Cache de Processamento
+- **Pandas**: Para manipulação rápida de DataFrames
+- **Processamento em lote**: Durante a tokenização (configurado no DataLoader)
+- **Validação incremental**: Verificações aplicadas conforme necessário
 
-```python
-def cache_processed_data(df, cache_path):
-    """
-    Salva dados processados em cache
-    
-    Args:
-        df: DataFrame processado
-        cache_path: Caminho do cache
-    """
-    df.to_parquet(cache_path, compression='snappy')
-    print(f"Dados salvos em cache: {cache_path}")
+Para otimizações adicionais, você pode implementar:
+- Cache de dados processados usando pickle ou parquet
+- Processamento paralelo para datasets muito grandes
+- Validação assíncrona para melhor performance
 
-def load_cached_data(cache_path):
-    """
-    Carrega dados do cache se disponível
-    
-    Args:
-        cache_path: Caminho do cache
-    
-    Returns:
-        DataFrame ou None se não encontrado
-    """
-    if os.path.exists(cache_path):
-        return pd.read_parquet(cache_path)
-    return None
-```
-
-## 🚀 Próximos Passos
+## Próximos Passos
 
 Após o processamento dos dados:
 

@@ -2,7 +2,7 @@
 
 Um sistema completo para fine-tuning do modelo PTT5 (Portuguese T5) usando quantização 4-bit e adaptadores LoRA, otimizado para geração de texto personalizada.
 
-## 🎯 Visão Geral
+## Visão Geral
 
 Este projeto implementa um pipeline completo de fine-tuning para o modelo PTT5 base, utilizando técnicas avançadas de otimização como:
 
@@ -11,7 +11,7 @@ Este projeto implementa um pipeline completo de fine-tuning para o modelo PTT5 b
 - **PEFT (Parameter-Efficient Fine-Tuning)**: Treina apenas uma pequena fração dos parâmetros
 - **Métricas robustas**: Avaliação com ROUGE e BLEU
 
-## 🚀 Início Rápido
+## Início Rápido
 
 ### Pré-requisitos
 - Python 3.8+
@@ -35,7 +35,7 @@ pip install -r requirements.txt
 python train_model.py
 ```
 
-## 📊 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 sistema_le_mat/
@@ -55,41 +55,41 @@ sistema_le_mat/
 └── requirements.txt           # Dependências
 ```
 
-## 📚 Documentação Completa
+## Documentação Completa
 
-### 🔧 Configuração e Instalação
+### Configuração e Instalação
 - **[Guia de Instalação](docs/installation.md)** - Instalação detalhada e configuração do ambiente
 - **[Configuração do Sistema](docs/configuration.md)** - Personalização de parâmetros e configurações
 
-### 🏗️ Arquitetura e Desenvolvimento
+### Arquitetura e Desenvolvimento
 - **[Arquitetura do Sistema](docs/architecture.md)** - Visão técnica detalhada da implementação
 - **[Processamento de Dados](docs/data-processing.md)** - Como os dados são processados e preparados
 
-### 📖 Guias de Uso
+### Guias de Uso
 - **[Guia de Uso](docs/usage.md)** - Como usar o sistema e interpretar resultados
 - **[Troubleshooting](docs/troubleshooting.md)** - Solução de problemas comuns
 
-### 🔒 Dados e Privacidade
+### Dados e Privacidade
 - **[Datasets e LGPD](docs/datasets.md)** - Informações sobre dados e conformidade
 
-## 🎯 Características Principais
+## Características Principais
 
-### ⚡ Otimizado para Eficiência
+### Otimizado para Eficiência
 - **Quantização 4-bit**: Reduz drasticamente o uso de memória
 - **LoRA**: Treina apenas 0.1% dos parâmetros do modelo
 - **Gradient Checkpointing**: Economia adicional de memória
 
-### 🎨 Flexível e Configurável
+### Flexível e Configurável
 - **Configuração YAML**: Fácil personalização de parâmetros
 - **Templates de Prompt**: Sistema modular para diferentes estilos
 - **Métricas Robustas**: Avaliação confiável com ROUGE e BLEU
 
-### 🔧 Pronto para Produção
+### Pronto para Produção
 - **Logging Completo**: Rastreamento detalhado do treinamento
 - **Tratamento de Erros**: Sistema robusto de recuperação
 - **Salvamento Automático**: Checkpoints e modelos preservados
 
-## 📈 Requisitos de Hardware
+## Requisitos de Hardware
 
 | Componente | Mínimo | Recomendado |
 |------------|---------|-------------|
@@ -98,7 +98,7 @@ sistema_le_mat/
 | **Armazenamento** | 10GB | 20GB+ |
 | **CUDA** | 11.8+ | 12.0+ |
 
-## 🔄 Fluxo de Trabalho
+## Fluxo de Trabalho
 
 1. **Preparação**: Configurar ambiente e dataset
 2. **Configuração**: Ajustar parâmetros no arquivo YAML
@@ -106,14 +106,14 @@ sistema_le_mat/
 4. **Avaliação**: Analisar métricas e resultados
 5. **Inferência**: Usar o modelo treinado
 
-## 📊 Métricas de Avaliação
+## Métricas de Avaliação
 
 O sistema utiliza métricas padrão da área:
 - **ROUGE-L**: Medida de qualidade baseada em subsequências
 - **BLEU**: Métrica de similaridade com referência
 - **Loss**: Perda de treinamento e validação
 
-## 🤝 Contribuição
+## Contribuição
 
 Para contribuir com o projeto:
 1. Faça um fork do repositório
@@ -121,11 +121,11 @@ Para contribuir com o projeto:
 3. Implemente as mudanças
 4. Abra um Pull Request
 
-## 📄 Licença
+## Licença
 
 Este projeto está licenciado sob a [Licença MIT](LICENSE) - veja o arquivo LICENSE para mais detalhes.
 
-## 🆘 Suporte
+## Suporte
 
 - **Issues**: Use o sistema de issues do GitHub
 - **Documentação**: Consulte a pasta [docs/](docs/) para informações detalhadas

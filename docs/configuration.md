@@ -1,4 +1,4 @@
-# ⚙️ Configuração do Sistema
+# Configuração do Sistema
 
 Este guia explica como configurar e personalizar o sistema de fine-tuning para suas necessidades específicas.
 
@@ -17,7 +17,7 @@ test_size:         # Tamanho do conjunto de validação
 random_state:      # Seed para reprodutibilidade
 ```
 
-## 🎯 Configurações do Modelo
+## Configurações do Modelo
 
 ### Modelo Base
 
@@ -27,10 +27,8 @@ model_config:
   max_length: 450
 ```
 
-**Opções disponíveis:**
-- `ptt5-small`: ~60M parâmetros (mais rápido)
-- `ptt5-base`: ~220M parâmetros (equilibrado)
-- `ptt5-large`: ~770M parâmetros (melhor qualidade)
+**Modelo utilizado:**
+- `ptt5-base`: Modelo base português otimizado (configurado no YAML)
 
 ### Quantização 4-bit
 
@@ -48,7 +46,7 @@ quantization:
 - `bnb_4bit_quant_type`: Tipo de quantização (`nf4` ou `fp4`)
 - `bnb_4bit_compute_dtype`: Tipo de dados (`float16` ou `bfloat16`)
 
-## 🔧 Configurações LoRA
+## Configurações LoRA
 
 ### Parâmetros Principais
 
@@ -81,7 +79,7 @@ target_modules: ["q", "v", "k", "o", "wi_0", "wi_1", "wo"]
 | **Dados médios** | 16 | 32 | 0.1 | Configuração padrão |
 | **Dados muitos** | 32 | 64 | 0.05 | Maior capacidade |
 
-## 🏋️ Configurações de Treinamento
+## Configurações de Treinamento
 
 ### Batch Size e Acumulação
 
@@ -131,7 +129,7 @@ save_strategy: "epoch"
 - `"steps"`: Avalia/salva a cada N steps
 - `"no"`: Não avalia durante o treinamento
 
-## 📊 Configurações de Avaliação
+## Configurações de Avaliação
 
 ### Métricas
 
@@ -158,7 +156,7 @@ early_stopping:
 - `patience`: Épocas sem melhoria antes de parar
 - `threshold`: Melhoria mínima considerada
 
-## 🗂️ Configurações de Dados
+## Configurações de Dados
 
 ### Dataset
 
@@ -185,7 +183,7 @@ O Excel deve conter estas colunas:
 | `tema` | string | Tema da interpretação |
 | `texto` | string | Texto de saída esperado |
 
-## 🎨 Configurações de Prompts
+## Configurações de Prompts
 
 ### Template Principal
 
@@ -215,7 +213,7 @@ TEMPLATE_CASUAL = (
 )
 ```
 
-## 🚀 Configurações Avançadas
+## Configurações Avançadas
 
 ### Otimizações de Memória
 
@@ -242,7 +240,7 @@ logging_steps: 8
 report_to: "none"
 ```
 
-## 📈 Configurações por Cenário
+## Configurações por Cenário
 
 ### Cenário 1: GPU Limitada (4-6GB)
 
@@ -280,7 +278,7 @@ training_args:
   fp16: true
 ```
 
-## 🔄 Configurações Experimentais
+## Configurações Experimentais
 
 ### Testes A/B
 
@@ -304,7 +302,7 @@ training_args:
   logging_steps: 1
 ```
 
-## 🛠️ Ferramentas de Configuração
+## Ferramentas de Configuração
 
 ### Validação de Configuração
 
@@ -352,7 +350,7 @@ config/
 └── experimental_config.yaml    # Experimentos
 ```
 
-## 🎯 Próximos Passos
+## Próximos Passos
 
 Após configurar o sistema:
 

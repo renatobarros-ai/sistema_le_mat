@@ -1,8 +1,8 @@
-# 📖 Guia de Uso
+# Guia de Uso
 
 Este guia explica como usar o sistema de fine-tuning PTT5, desde a execução básica até a interpretação de resultados.
 
-## 🚀 Execução Básica
+## Execução Básica
 
 ### Comando Principal
 
@@ -21,7 +21,7 @@ python train_model.py | tee training_output.log
 tail -f results/training_log_*.log
 ```
 
-## 📊 Fases do Treinamento
+## Fases do Treinamento
 
 ### 1. Inicialização
 
@@ -113,7 +113,7 @@ Batch efetivo: 8
 - Batch efetivo calculado
 - Otimizações aplicadas
 
-## 📈 Interpretando o Progresso
+## Interpretando o Progresso
 
 ### Métricas Durante o Treinamento
 
@@ -159,7 +159,7 @@ Epoch 20: Train Loss: 2.00, Eval Loss: 2.10, ROUGE-L: 0.05
 Epoch 15: Train Loss: 1.20, Eval Loss: 3.50, ROUGE-L: 0.01
 ```
 
-## 🎯 Resultados Finais
+## Resultados Finais
 
 ### Relatório de Conclusão
 
@@ -193,7 +193,7 @@ Epoch 15: Train Loss: 1.20, Eval Loss: 3.50, ROUGE-L: 0.01
 ✅ Modelo salvo com sucesso em: ./model_save/lora_model_462_optimized
 ```
 
-## 📁 Arquivos Gerados
+## Arquivos Gerados
 
 ### Estrutura de Resultados
 
@@ -216,7 +216,7 @@ model_save/lora_model_462_optimized/
 └── special_tokens_map.json                 # Tokens especiais
 ```
 
-## 🔍 Análise Detalhada
+## Análise Detalhada
 
 ### Arquivo de Métricas JSON
 
@@ -256,62 +256,28 @@ model_save/lora_model_462_optimized/
 }
 ```
 
-## 🎮 Usando o Modelo Treinado
+## Usando o Modelo Treinado
 
-### Carregamento do Modelo
+### Usando o Modelo Treinado
 
-```python
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-from peft import PeftModel
+Após o treinamento, o modelo LoRA será salvo em `./model_save/lora_model_462_optimized/`. Para usar o modelo:
 
-# Carregar modelo base
-base_model = AutoModelForSeq2SeqLM.from_pretrained(
-    "unicamp-dl/ptt5-base-portuguese-vocab"
-)
+1. **Carregamento**: O modelo contém os adaptadores LoRA treinados
+2. **Tokenizer**: Salvo junto com o modelo para compatibilidade
+3. **Inferência**: Use bibliotecas padrão do Hugging Face para geração
 
-# Carregar adaptadores LoRA
-model = PeftModel.from_pretrained(
-    base_model, 
-    "./model_save/lora_model_462_optimized"
-)
-
-# Carregar tokenizer
-tokenizer = AutoTokenizer.from_pretrained(
-    "./model_save/lora_model_462_optimized"
-)
+**Estrutura dos arquivos salvos:**
+```
+model_save/lora_model_462_optimized/
+├── adapter_config.json          # Configuração LoRA
+├── adapter_model.bin           # Pesos dos adaptadores
+├── tokenizer.json              # Tokenizer
+└── tokenizer_config.json       # Configuração do tokenizer
 ```
 
-### Geração de Texto
+Para implementar a inferência, consulte a documentação oficial do PEFT e Transformers sobre como carregar e usar modelos LoRA.
 
-```python
-def generate_interpretation(carta, evento, secao, tema):
-    prompt = f"Gere uma interpretação para a carta '{carta}' em '{evento}', na seção '{secao}', sobre o tema '{tema}', com o estilo da pessoa X."
-    
-    inputs = tokenizer(prompt, return_tensors="pt", max_length=450, truncation=True)
-    
-    with torch.no_grad():
-        outputs = model.generate(
-            **inputs,
-            max_length=450,
-            num_beams=4,
-            do_sample=True,
-            temperature=0.7,
-            pad_token_id=tokenizer.pad_token_id
-        )
-    
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
-
-# Exemplo de uso
-resultado = generate_interpretation(
-    carta="O Mago",
-    evento="Ano Novo",
-    secao="Geral",
-    tema="Trabalho"
-)
-print(resultado)
-```
-
-## 🔧 Ajustes Durante o Treinamento
+## Ajustes Durante o Treinamento
 
 ### Early Stopping
 
@@ -335,24 +301,21 @@ Best model restored from checkpoint-180
 ✅ Checkpoint de emergência salvo em: ./model_save/emergency_checkpoint_20250711_143022
 ```
 
-## 📊 Monitoramento de Recursos
+## Monitoramento de Recursos
 
 ### Uso de GPU
 
-```python
-# Monitor simples de GPU
-import torch
+Para monitorar o uso de GPU durante o treinamento:
 
-def monitor_gpu():
-    if torch.cuda.is_available():
-        print(f"GPU: {torch.cuda.get_device_name(0)}")
-        print(f"Memória usada: {torch.cuda.memory_used(0)/1024**3:.1f}GB")
-        print(f"Memória total: {torch.cuda.get_device_properties(0).total_memory/1024**3:.1f}GB")
-        print(f"Utilização: {torch.cuda.memory_used(0)/torch.cuda.get_device_properties(0).total_memory*100:.1f}%")
+```bash
+# Monitorar GPU em tempo real
+watch -n 1 nvidia-smi
 
-# Executar durante o treinamento
-monitor_gpu()
+# Verificar uso de memória
+nvidia-smi --query-gpu=memory.used,memory.total --format=csv
 ```
+
+O sistema exibe automaticamente informações de VRAM no início do treinamento.
 
 ### Tempo de Treinamento
 
@@ -367,7 +330,7 @@ Tempo total estimado: 40-60 minutos
 - Configurações de batch
 - Comprimento das sequências
 
-## 🎯 Próximos Passos
+## Próximos Passos
 
 Após o treinamento bem-sucedido:
 

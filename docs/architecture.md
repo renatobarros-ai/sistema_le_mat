@@ -1,8 +1,8 @@
-# 🏗️ Arquitetura do Sistema
+# Arquitetura do Sistema
 
 Este documento explica a arquitetura técnica do sistema de fine-tuning PTT5, detalhando cada componente e suas interações.
 
-## 🎯 Visão Geral da Arquitetura
+## Visão Geral da Arquitetura
 
 O sistema implementa uma arquitetura modular baseada em três pilares principais:
 
@@ -10,7 +10,7 @@ O sistema implementa uma arquitetura modular baseada em três pilares principais
 2. **QLoRA**: Combinação de quantização com adaptadores LoRA
 3. **Pipeline de Treinamento**: Processamento completo end-to-end
 
-## 🧩 Componentes Principais
+## Componentes Principais
 
 ### 1. Modelo Base (PTT5)
 
@@ -27,11 +27,14 @@ model_name = "unicamp-dl/ptt5-base-portuguese-vocab"
 ### 2. Quantização 4-bit
 
 ```python
+# Configuração carregada do arquivo YAML
+bnb_compute_dtype = getattr(torch, model_config['quantization']['bnb_4bit_compute_dtype'].split('.')[-1])
+
 bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_use_double_quant=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.float16
+    load_in_4bit=model_config['quantization']['load_in_4bit'],
+    bnb_4bit_use_double_quant=model_config['quantization']['bnb_4bit_use_double_quant'],
+    bnb_4bit_quant_type=model_config['quantization']['bnb_4bit_quant_type'],
+    bnb_4bit_compute_dtype=bnb_compute_dtype
 )
 ```
 
@@ -44,14 +47,9 @@ bnb_config = BitsAndBytesConfig(
 ### 3. Adaptadores LoRA
 
 ```python
-lora_config = LoraConfig(
-    r=16,                    # Rank das matrizes
-    lora_alpha=32,           # Fator de escala
-    target_modules=["q", "v", "k", "o", "wi_0", "wi_1", "wo"],
-    lora_dropout=0.1,
-    bias="none",
-    task_type="SEQ_2_SEQ_LM"
-)
+# Configuração LoRA carregada do arquivo YAML
+lora_config = LoraConfig(**lora_config_data)
+model = get_peft_model(model, lora_config)
 ```
 
 **Conceito LoRA:**
@@ -65,7 +63,7 @@ lora_config = LoraConfig(
 W_output = W_frozen + (A × B)
 ```
 
-## 🔄 Pipeline de Processamento
+## Pipeline de Processamento
 
 ### 1. Carregamento de Dados
 
@@ -121,7 +119,7 @@ trainer = Trainer(
 )
 ```
 
-## 📊 Fluxo de Dados
+## Fluxo de Dados
 
 ```mermaid
 graph TD
@@ -138,7 +136,7 @@ graph TD
     K --> L[Modelo Treinado]
 ```
 
-## 🎛️ Configuração Avançada
+## Configuração Avançada
 
 ### Parâmetros de Memória
 
@@ -168,7 +166,7 @@ warmup_ratio: 0.15
 - Decaimento cosseno: Suave redução
 - Previne overfitting
 
-## 🔍 Métricas de Avaliação
+## Métricas de Avaliação
 
 ### ROUGE (Recall-Oriented Understudy for Gisting Evaluation)
 
@@ -199,7 +197,7 @@ bleu_result = bleu.compute(
 - Penaliza textos muito curtos
 - Considera n-gramas até ordem 4
 
-## 🧠 Decodificação Robusta
+## Decodificação Robusta
 
 ### Tratamento de Estruturas Complexas
 
@@ -217,7 +215,7 @@ def _handle_complex_structures(data):
 - Tokens inválidos
 - Estruturas aninhadas
 
-## 🎯 Otimizações Implementadas
+## Otimizações Implementadas
 
 ### 1. Uso de Memória
 
@@ -239,7 +237,7 @@ def _handle_complex_structures(data):
 - **Gradient Clipping**: Previne explosão
 - **Warmup**: Estabiliza início do treinamento
 
-## 📁 Estrutura de Arquivos
+## Estrutura de Arquivos
 
 ```
 sistema_le_mat/
@@ -253,7 +251,7 @@ sistema_le_mat/
     └── training_config.yaml # Configurações
 ```
 
-## 🔧 Pontos de Extensão
+## Pontos de Extensão
 
 ### Novos Templates
 
@@ -279,7 +277,7 @@ custom_config:
   parameter: value
 ```
 
-## 🚀 Próximos Desenvolvimentos
+## Próximos Desenvolvimentos
 
 ### Possíveis Melhorias
 

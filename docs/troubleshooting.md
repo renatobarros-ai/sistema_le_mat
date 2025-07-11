@@ -1,8 +1,8 @@
-# 🔧 Troubleshooting
+# Troubleshooting
 
 Este guia ajuda a resolver problemas comuns durante a instalação e uso do sistema de fine-tuning PTT5.
 
-## 🚨 Problemas de Instalação
+## Problemas de Instalação
 
 ### Erro de Dependências Python
 
@@ -61,7 +61,7 @@ pip install --upgrade transformers>=4.30.0
 python -c "import transformers; print(transformers.__version__)"
 ```
 
-## 📊 Problemas de Dados
+## Problemas de Dados
 
 ### Arquivo não Encontrado
 
@@ -122,7 +122,7 @@ null_rows = df[df.isnull().any(axis=1)]
 print(null_rows)
 ```
 
-## 🔥 Problemas de Treinamento
+## Problemas de Treinamento
 
 ### Erro de Memória GPU
 
@@ -181,7 +181,7 @@ model_config:
   max_length: 256  # Reduzir se possível
 ```
 
-## 📈 Problemas de Métricas
+## Problemas de Métricas
 
 ### Métricas Sempre Zero
 
@@ -232,7 +232,7 @@ early_stopping:
   patience: 3  # Reduzir paciência
 ```
 
-## 🔧 Problemas de Configuração
+## Problemas de Configuração
 
 ### Erro de YAML
 
@@ -266,7 +266,7 @@ training_args:
   per_device_train_batch_size: 1  # Int
 ```
 
-## 🐛 Problemas de Execução
+## Problemas de Execução
 
 ### Processo Interrompido
 
@@ -302,83 +302,44 @@ mkdir -p results model_save
 ls -la results/
 ```
 
-## 🧪 Ferramentas de Diagnóstico
+## Ferramentas de Diagnóstico
 
-### Script de Teste
+### Comandos de Teste
 
-```python
-# test_system.py
-import torch
-import pandas as pd
-import yaml
-from transformers import AutoTokenizer
+Use estes comandos para testar o sistema:
 
-def test_system():
-    print("=== TESTE DO SISTEMA ===")
-    
-    # Teste 1: Hardware
-    print(f"CUDA disponível: {torch.cuda.is_available()}")
-    if torch.cuda.is_available():
-        print(f"GPU: {torch.cuda.get_device_name(0)}")
-        print(f"VRAM: {torch.cuda.get_device_properties(0).total_memory/1024**3:.1f}GB")
-    
-    # Teste 2: Dados
-    try:
-        df = pd.read_excel("database/db_462.xlsx")
-        print(f"Dataset carregado: {len(df)} registros")
-        print(f"Colunas: {df.columns.tolist()}")
-    except Exception as e:
-        print(f"Erro no dataset: {e}")
-    
-    # Teste 3: Configuração
-    try:
-        with open("config/training_config.yaml", 'r') as f:
-            config = yaml.safe_load(f)
-        print("Configuração YAML válida")
-    except Exception as e:
-        print(f"Erro na configuração: {e}")
-    
-    # Teste 4: Modelo
-    try:
-        tokenizer = AutoTokenizer.from_pretrained("unicamp-dl/ptt5-base-portuguese-vocab")
-        print("Modelo base acessível")
-    except Exception as e:
-        print(f"Erro no modelo: {e}")
-    
-    print("=== TESTE CONCLUÍDO ===")
+```bash
+# Teste 1: Verificar Python e bibliotecas
+python -c "import torch; print('PyTorch OK')"
+python -c "import transformers; print('Transformers OK')"
+python -c "import yaml; print('YAML OK')"
 
-if __name__ == "__main__":
-    test_system()
+# Teste 2: Verificar módulos do projeto
+python -c "from utils.data_processing import validate_dataframe; print('Utils OK')"
+python -c "from prompts.pessoa_x_prompt import PESSOA_X_FINE_TUNING_PROMPT; print('Prompts OK')"
+
+# Teste 3: Verificar configuração
+python -c "import yaml; yaml.safe_load(open('config/training_config.yaml')); print('Config OK')"
+
+# Teste 4: Verificar dataset (se existir)
+python -c "import pandas as pd; df = pd.read_excel('database/db_462.xlsx'); print(f'Dataset: {len(df)} registros')"
+
+# Teste 5: Verificar CUDA
+python -c "import torch; print('CUDA disponível:', torch.cuda.is_available())"
 ```
 
-### Monitor de Recursos
+### Monitoramento Simples
 
-```python
-# monitor.py
-import psutil
-import torch
-import time
+```bash
+# Monitorar recursos do sistema
+htop  # CPU e RAM
+nvidia-smi  # GPU (se disponível)
 
-def monitor_resources():
-    while True:
-        # CPU
-        cpu_percent = psutil.cpu_percent()
-        # RAM
-        ram = psutil.virtual_memory()
-        # GPU
-        if torch.cuda.is_available():
-            gpu_mem = torch.cuda.memory_used(0) / 1024**3
-            gpu_total = torch.cuda.get_device_properties(0).total_memory / 1024**3
-            
-            print(f"CPU: {cpu_percent}% | RAM: {ram.percent}% | GPU: {gpu_mem:.1f}/{gpu_total:.1f}GB")
-        
-        time.sleep(5)
-
-if __name__ == "__main__":
-    monitor_resources()
+# Monitorar logs do treinamento
+tail -f results/training_log_*.log
 ```
 
-## 🚨 Problemas Críticos
+## Problemas Críticos
 
 ### Modelo Não Salva
 
@@ -428,23 +389,29 @@ Ao reportar problemas, inclua:
 
 ### Coleta de Informações
 
+Para reportar problemas, colete estas informações:
+
 ```bash
-# Script para coleta de informações
-#!/bin/bash
-echo "=== INFORMAÇÕES DO SISTEMA ==="
+# Informações básicas do sistema
 echo "Data: $(date)"
 echo "Python: $(python --version)"
 echo "Sistema: $(uname -a)"
-echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader,nounits)"
-echo "VRAM: $(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits)"
-echo "Espaço em disco: $(df -h . | tail -1)"
-echo "Arquivos de configuração:"
+
+# Informações de GPU (se disponível)
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits
+
+# Espaço em disco
+df -h .
+
+# Estrutura do projeto
 ls -la config/
-echo "Estrutura de dados:"
 ls -la database/
+
+# Versões das bibliotecas
+pip list | grep -E "(torch|transformers|pandas|peft)"
 ```
 
-## 📚 Recursos Adicionais
+## Recursos Adicionais
 
 ### Documentação Útil
 

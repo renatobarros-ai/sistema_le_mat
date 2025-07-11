@@ -1,4 +1,4 @@
-# 🔧 Guia de Instalação
+# Guia de Instalação
 
 Este guia detalha como configurar o ambiente e instalar todas as dependências necessárias para o sistema de fine-tuning PTT5.
 
@@ -15,7 +15,7 @@ Este guia detalha como configurar o ambiente e instalar todas as dependências n
 - **CUDA**: 11.8 ou superior
 - **Git**: Para clonar o repositório
 
-## 🚀 Instalação Passo a Passo
+## Instalação Passo a Passo
 
 ### 1. Verificar Ambiente
 
@@ -69,28 +69,23 @@ pip install bitsandbytes rouge-score sacrebleu
 
 ### 5. Verificar Instalação
 
-Execute este script para verificar se tudo está funcionando:
+Execute estes comandos para verificar se tudo está funcionando:
 
-```python
-# test_installation.py
-import torch
-import transformers
-import peft
-import bitsandbytes
-import pandas as pd
+```bash
+# Verificar Python e bibliotecas principais
+python -c "import torch; print('PyTorch:', torch.__version__)"
+python -c "import transformers; print('Transformers:', transformers.__version__)"
+python -c "import pandas; print('Pandas:', pandas.__version__)"
 
-print("✅ Verificação de instalação:")
-print(f"Python: {torch.__version__}")
-print(f"PyTorch: {torch.__version__}")
-print(f"Transformers: {transformers.__version__}")
-print(f"PEFT: {peft.__version__}")
-print(f"CUDA disponível: {torch.cuda.is_available()}")
-if torch.cuda.is_available():
-    print(f"GPU: {torch.cuda.get_device_name(0)}")
-    print(f"VRAM: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f}GB")
+# Verificar CUDA (se disponível)
+python -c "import torch; print('CUDA disponível:', torch.cuda.is_available())"
+
+# Testar imports do projeto
+python -c "from utils.data_processing import validate_dataframe; print('Utils OK')"
+python -c "from prompts.pessoa_x_prompt import PESSOA_X_FINE_TUNING_PROMPT; print('Prompts OK')"
 ```
 
-## 🔧 Configuração do Ambiente
+## Configuração do Ambiente
 
 ### Variáveis de Ambiente
 
@@ -114,7 +109,7 @@ mkdir -p model_save
 mkdir -p database
 ```
 
-## 🗂️ Preparação dos Dados
+## Preparação dos Dados
 
 ### Dataset
 
@@ -142,7 +137,7 @@ O arquivo `config/training_config.yaml` já está configurado com valores otimiz
 - **Learning rate**: Modifique se necessário
 - **Epochs**: Controle a duração do treinamento
 
-## 🚨 Problemas Comuns
+## Problemas Comuns
 
 ### Erro de CUDA
 ```bash
@@ -164,7 +159,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## 🔄 Próximos Passos
+## Próximos Passos
 
 Após a instalação bem-sucedida:
 
@@ -173,7 +168,7 @@ Após a instalação bem-sucedida:
 3. **Execute** o treinamento com `python train_model.py`
 4. **Monitore** o progresso nos logs
 
-## 📊 Verificação Final
+## Verificação Final
 
 Execute esta checklist antes de iniciar o treinamento:
 
@@ -186,7 +181,7 @@ Execute esta checklist antes de iniciar o treinamento:
 
 Se todos os itens estiverem marcados, você está pronto para iniciar o treinamento!
 
-## 🆘 Suporte
+## Suporte
 
 Se encontrar problemas durante a instalação:
 
