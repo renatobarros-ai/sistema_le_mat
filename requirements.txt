@@ -1,0 +1,50 @@
+# ============================================================================
+# REQUIREMENTS.TXT COMPLETO PARA FINE-TUNING PTT5 COM QLoRA
+# ============================================================================
+
+# Bibliotecas essenciais para manipulação de dados
+pandas
+openpyxl
+numpy
+
+# Bibliotecas de Machine Learning / Deep Learning
+scikit-learn
+torch
+
+# Bibliotecas Hugging Face para modelos de linguagem e fine-tuning
+transformers
+peft
+datasets
+evaluate
+accelerate
+
+# Para quantização de modelos em 4 bits (BitsAndBytesConfig)
+bitsandbytes
+
+# Para configuração em YAML
+PyYAML
+
+# Para detecção de hardware
+psutil
+
+# Dependências críticas para tokenizers
+protobuf
+sentencepiece
+tiktoken
+
+# Bibliotecas de métricas e avaliação
+rouge-score
+sacrebleu
+
+# Para logging e monitoramento (opcional, mas recomendado)
+tqdm
+
+# Para compatibilidade e estabilidade
+packaging
+filelock
+huggingface-hub
+tokenizers
+safetensors
+
+# GPU monitoring (opcional - só instala se GPUtil estiver disponível)
+# GPUtil>=1.4.0  # Descomente se quiser monitoramento de GPU

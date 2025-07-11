@@ -1,0 +1,62 @@
+# config/training_config.yaml - COMPATÍVEL COM SEU train_model.py ATUAL
+# Configuração para fine-tuning PTT5 com QLoRA
+
+# Configurações do modelo base
+model_config:
+  name: "unicamp-dl/ptt5-base-portuguese-vocab"
+  max_length: 450
+  quantization:
+    load_in_4bit: true
+    bnb_4bit_use_double_quant: true
+    bnb_4bit_quant_type: "nf4"
+    bnb_4bit_compute_dtype: "torch.float16"
+
+# Configurações LoRA para PEFT
+lora_config:
+  r: 16
+  lora_alpha: 32
+  target_modules: ["q", "v", "k", "o", "wi_0", "wi_1", "wo"]
+  lora_dropout: 0.1
+  bias: "none"
+  task_type: "SEQ_2_SEQ_LM"
+
+# Argumentos de treinamento
+training_args:
+  output_dir: "./results"
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 8
+  eval_accumulation_steps: 4
+  num_train_epochs: 20
+  warmup_ratio: 0.15
+  learning_rate: 0.00002  # CRÍTICO: float explícito para evitar erro de tipo
+  fp16: true
+  logging_steps: 8
+  save_steps: 60
+  eval_strategy: "epoch"
+  save_strategy: "epoch"
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_rougeL"
+  greater_is_better: true
+  save_total_limit: 2
+  push_to_hub: false
+  dataloader_pin_memory: true
+  remove_unused_columns: false
+  gradient_checkpointing: true
+  optim: "adamw_torch"
+  weight_decay: 0.01
+  lr_scheduler_type: "cosine"
+  report_to: "none"
+  dataloader_num_workers: 2
+  max_grad_norm: 1.0
+  ddp_find_unused_parameters: false
+
+# Configurações de early stopping
+early_stopping:
+  patience: 4
+  threshold: 0.001
+
+# CAMPOS ESPERADOS NO NÍVEL RAIZ PELO SEU CÓDIGO ATUAL
+dataset_path: "./database/db_ano_novo-462.xlsx"
+test_size: 0.15
+random_state: 42
