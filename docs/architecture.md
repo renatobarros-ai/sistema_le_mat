@@ -86,8 +86,8 @@ train_data = prepare_data_for_fine_tuning(train_df, prompt_template)
 
 **Transformação:**
 ```
-Input: "Gere uma interpretação para a carta 'O Mago' em 'Ano Novo'..."
-Output: "2025 é um ano para focar na sua capacidade..."
+Input: "Gere uma interpretação para a carta 'Dama' em 'Pinkpop'..."
+Output: "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
 ```
 
 ### 3. Tokenização

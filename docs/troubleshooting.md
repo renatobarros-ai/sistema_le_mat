@@ -86,7 +86,7 @@ cat config/training_config.yaml | grep dataset_path
 
 **Problema:**
 ```bash
-ValueError: DataFrame faltando colunas necessárias: ['texto', 'carta', 'evento', 'secao', 'tema']
+ValueError: DataFrame faltando colunas necessárias: ['evento', 'carta', 'tema', 'secao', 'texto']
 ```
 
 **Soluções:**
@@ -98,8 +98,8 @@ print("Colunas encontradas:", df.columns.tolist())
 
 # Renomear colunas se necessário
 df = df.rename(columns={
-    'arcano_maior': 'carta',
-    'interpretacao': 'texto'
+    'card': 'carta',
+    'text': 'texto'
 })
 ```
 

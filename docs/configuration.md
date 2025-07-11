@@ -177,10 +177,10 @@ O Excel deve conter estas colunas:
 
 | Coluna | Tipo | Descrição |
 |--------|------|-----------|
-| `carta` | string | Nome da carta |
 | `evento` | string | Contexto do evento |
-| `secao` | string | Seção específica |
+| `carta` | string | Nome da carta |
 | `tema` | string | Tema da interpretação |
+| `secao` | string | Seção específica |
 | `texto` | string | Texto de saída esperado |
 
 ## Configurações de Prompts

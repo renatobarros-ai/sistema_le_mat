@@ -10,20 +10,19 @@ O sistema espera um arquivo Excel (`.xlsx`) com as seguintes colunas:
 
 | Coluna | Tipo | Obrigatório | Descrição |
 |--------|------|-------------|-----------|
-| `carta` | String | ✅ | Nome da carta (ex: "O Mago", "A Imperatriz") |
-| `evento` | String | ✅ | Contexto do evento (ex: "Ano Novo", "Natal") |
-| `secao` | String | ✅ | Seção específica (ex: "Geral", "Amor", "Trabalho") |
-| `tema` | String | ✅ | Tema da interpretação (ex: "Família", "Carreira") |
+| `evento` | String | ✅ | Contexto do evento (ex: "Pinkpop", "Woodstock") |
+| `carta` | String | ✅ | Nome da carta (ex: "Dama", "Rei") |
+| `tema` | String | ✅ | Tema da interpretação (ex: "Catppuccin", "Tokio Night") |
+| `secao` | String | ✅ | Seção específica (ex: "Ficção científica", "Biografia") |
 | `texto` | String | ✅ | Texto de interpretação esperado |
 
 ### Exemplo de Estrutura
 
 ```
-carta        | evento    | secao    | tema      | texto
--------------|-----------|----------|-----------|------------------
-O Mago       | Ano Novo  | Geral    | Trabalho  | 2025 é um ano para focar...
-A Imperatriz | Natal     | Amor     | Família   | O amor familiar se destaca...
-O Louco      | Ano Novo  | Geral    | Mudanças  | Novos começos surgem...
+evento       | carta | tema         | secao             | texto
+-------------|-------|--------------|-------------------|------------------
+Pinkpop      | Dama  | Catppuccin   | Ficção científica | Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Woodstock    | Rei   | Tokio Night  | Biografia         | Ut at risus vehicula, feugiat nibh a, venenatis felis.
 ```
 
 ## Conformidade com LGPD
@@ -42,7 +41,7 @@ O dataset (`database/db_462.xlsx`) **não está incluído** no repositório púb
 #### 1. Minimização de Dados
 ```python
 # Apenas colunas necessárias são processadas
-required_columns = ['texto', 'carta', 'evento', 'secao', 'tema']
+required_columns = ['evento', 'carta', 'tema', 'secao', 'texto']
 df = validate_dataframe(df, required_columns)
 ```
 

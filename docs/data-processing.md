@@ -21,7 +21,7 @@ logger.info(f"Dados carregados: {len(df)} registros")
 
 ```python
 # Validação das colunas obrigatórias
-required_columns = ['texto', 'carta', 'evento', 'secao', 'tema']
+required_columns = ['evento', 'carta', 'tema', 'secao', 'texto']
 df = validate_dataframe(df, required_columns)
 ```
 
@@ -162,17 +162,17 @@ def prepare_data_for_fine_tuning(dataframe, prompt_template):
 
 **Entrada:**
 ```
-carta: "O Mago"
-evento: "Ano Novo"
-secao: "Geral"
-tema: "Trabalho"
-texto: "2025 é um ano para focar..."
+evento: "Pinkpop"
+carta: "Dama"
+tema: "Catppuccin"
+secao: "Ficção científica"
+texto: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 ```
 
 **Saída:**
 ```
-input: "Gere uma interpretação para a carta 'O Mago' em 'Ano Novo', na seção 'Geral', sobre o tema 'Trabalho', com o estilo da pessoa X."
-output: "2025 é um ano para focar..."
+input: "Gere uma interpretação para a carta 'Dama' em 'Pinkpop', na seção 'Ficção científica', sobre o tema 'Catppuccin', com o estilo da pessoa X."
+output: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 ```
 
 ## 🔤 Tokenização
@@ -314,7 +314,7 @@ def validate_data_quality(df):
         issues.append(f"Cartas com poucos exemplos: {min_samples_per_carta}")
     
     # Verificar duplicatas
-    duplicates = df.duplicated(subset=['carta', 'evento', 'secao', 'tema']).sum()
+    duplicates = df.duplicated(subset=['evento', 'carta', 'tema', 'secao']).sum()
     if duplicates > 0:
         issues.append(f"Registros duplicados: {duplicates}")
     

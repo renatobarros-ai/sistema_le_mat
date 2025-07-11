@@ -114,19 +114,19 @@ mkdir -p database
 ### Dataset
 
 1. **Formato**: O sistema espera um arquivo Excel (`.xlsx`) com as colunas:
-   - `carta`: Nome da carta
    - `evento`: Contexto do evento
-   - `secao`: Seção específica
+   - `carta`: Nome da carta
    - `tema`: Tema da interpretação
+   - `secao`: Seção específica
    - `texto`: Texto de saída esperado
 
 2. **Localização**: Coloque o arquivo em `database/db_462.xlsx`
 
 3. **Exemplo de estrutura**:
    ```
-   carta        | evento    | secao    | tema      | texto
-   O Mago       | Ano Novo  | Geral    | Trabalho  | Interpretação...
-   A Imperatriz | Natal     | Amor     | Família   | Interpretação...
+   evento       | carta     | tema          | secao               | texto
+   Pinkpop      | Dama      | Catppuccin    | Ficção científica   | Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+   Woodstock    | Rei       | Tokio Night   | Biografia           | Ut at risus vehicula, feugiat nibh a, venenatis felis.
    ```
 
 ### Configuração
